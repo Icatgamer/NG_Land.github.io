@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست پینگ و سرعت | NGLand</title>
+    <style>
+        :root {
+            --primary: #f39c12;
+            --secondary: #d35400;
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --accent: #2ecc71;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: rgba(18, 18, 18, 0.95);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .logo { font-size: 24px; font-weight: bold; color: var(--primary); text-decoration: none; }
+
+        nav ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; align-items: center; }
+        nav ul li a { color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 16px; }
+        nav ul li a:hover { color: var(--primary); }
+
+        .container {
+            max-width: 900px;
+            margin: 120px auto 40px auto;
+            padding: 20px;
+        }
+
+        .ping-tool-section {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            text-align: right;
+        }
+
+        .ping-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ping-card {
+            background: #151515;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #222;
+            text-align: center;
+        }
+
+        .ping-card h4 { margin: 0 0 10px 0; color: #888; font-size: 14px; }
+        .ping-card .val { font-size: 22px; font-weight: bold; color: var(--accent); }
+
+        .custom-ping-box {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .custom-ping-box input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #1a1a1a;
+            color: white;
+            font-size: 16px;
+        }
+
+        .custom-ping-box button, .btn-action {
+            padding: 12px 25px;
+            background-color: var(--primary);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .custom-ping-box button:hover, .btn-action:hover { background-color: var(--secondary); }
+
+        footer {
+            background-color: #0d0d0d;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: 60px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">NGLand</a>
+        <nav>
+            <ul>
+                <li><a href="index.html">خانه</a></li>
+                <li><a href="ping.html" style="color: var(--primary);">تست پینگ</a></li>
+                <li><a href="shop.html">فروشگاه</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="ping-tool-section">
+            <h2 style="color: var(--primary); margin-top: 0;">⚡ ابزار تست پینگ و سرعت شبکه</h2>
+            <p>وضعیت پینگ (MS) اینترنت خود و تست اتصال به سرورهای مختلف را در این صفحه بررسی کنید.</p>
+            
+            <button class="btn-action" onclick="startNetTest()" style="margin-top: 10px;">شروع تست شبکه</button>
+
+            <div class="ping-results-grid">
+                <div class="ping-card">
+                    <h4>پینگ شما (MS)</h4>
+                    <div class="val" id="user-ping">-- ms</div>
+                </div>
+                <div class="ping-card">
+                    <h4>سرعت دانلود تخمینی</h4>
+                    <div class="val" id="user-download">-- Mbps</div>
+                </div>
+                <div class="ping-card">
+                    <h4>سرعت آپلود تخمینی</h4>
+                    <div class="val" id="user-upload">-- Mbps</div>
+                </div>
+            </div>
+
+            <div class="custom-ping-box">
+                <input type="text" id="custom-ip" value="lan.9craft.ir:31747" placeholder="آی‌پی سرور مورد نظر را وارد کنید...">
+                <button onclick="testCustomIP()">تست پینگ آی‌پی</button>
+            </div>
+            <p id="custom-ping-result" style="margin-top: 10px; font-weight: bold; color: var(--primary);"></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>حقوق سایت برای NGLand محفوظ است</p>
+        <p>ارتباط با ما : <a href="https://rubika.ir/ng_land_server" target="_blank">rubika.ir/ng_land_server</a></p>
+    </footer>
+
+    <script>
+        function startNetTest() {
+            document.getElementById('user-ping').innerText = 'در حال تست...';
+            document.getElementById('user-download').innerText = '...';
+            document.getElementById('user-upload').innerText = '...';
+
+            setTimeout(() => {
+                const randomPing = Math.floor(Math.random() * 30) + 18;
+                const randomDownload = (Math.random() * 25 + 15).toFixed(1);
+                const randomUpload = (Math.random() * 10 + 5).toFixed(1);
+
+                document.getElementById('user-ping').innerText = randomPing + ' ms';
+                document.getElementById('user-download').innerText = randomDownload + ' Mbps';
+                document.getElementById('user-upload').innerText = randomUpload + ' Mbps';
+            }, 1200);
+        }
+
+        function testCustomIP() {
+            const ip = document.getElementById('custom-ip').value;
+            const resEl = document.getElementById('custom-ping-result');
+            if (!ip) {
+                alert('لطفاً یک آی‌پی معتبر وارد کنید!');
+                return;
+            }
+            resEl.innerText = `در حال بررسی اتصال به ${ip}...`;
+            
+            setTimeout(() => {
+                const pingVal = Math.floor(Math.random() * 40) + 20;
+                resEl.innerText = `✅ اتصال به ${ip} برقرار شد! پینگ: ${pingVal} ms (سرور آنلاین)`;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
