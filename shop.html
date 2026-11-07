@@ -6,12 +6,14 @@
     <title>فروشگاه | NGLand</title>
     <style>
         :root {
-            --primary: #f39c12;
-            --secondary: #d35400;
-            --bg-dark: #121212;
-            --card-bg: #1e1e1e;
-            --text-main: #e0e0e0;
-            --accent: #2ecc71;
+            --bg-dark: #0b0f19;
+            --card-bg: #131b2e;
+            --primary: #10b981;
+            --secondary: #059669;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border: #1e293b;
+            --danger: #ef4444;
         }
 
         body {
@@ -19,240 +21,207 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         header {
-            background-color: rgba(18, 18, 18, 0.95);
-            padding: 15px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--primary);
-            position: fixed;
-            width: 100%;
-            top: 0;
+            padding: 0 30px;
             z-index: 1000;
             box-sizing: border-box;
+            transition: 0.3s;
         }
 
-        .logo { font-size: 24px; font-weight: bold; color: var(--primary); text-decoration: none; }
+        header.scrolled {
+            background-color: rgba(11, 15, 25, 0.95);
+            border-bottom-color: var(--primary);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
 
-        nav ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
-        nav ul li a { color: var(--text-main); text-decoration: none; font-weight: 600; }
+        .logo { font-size: 22px; font-weight: bold; color: var(--primary); text-decoration: none; display: flex; gap: 8px; align-items: center; }
+        .nav-center { display: flex; gap: 15px; align-items: center; }
+        .nav-right { display: flex; gap: 12px; align-items: center; }
+        .badge { background-color: #1e293b; padding: 6px 14px; border-radius: 20px; font-size: 13px; display: flex; gap: 6px; border: 1px solid var(--border); }
+        .nav-link { color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 16px; border-radius: 8px; background-color: #1e293b; border: 1px solid var(--border); transition: 0.2s; }
+        .nav-link:hover { border-color: var(--primary); color: var(--primary); }
+        .nav-link.primary { background-color: var(--primary); color: #fff; border: none; }
 
         .container {
             max-width: 1200px;
-            margin: 120px auto 40px auto;
+            margin: 110px auto 40px auto;
             padding: 20px;
+            flex: 1;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 24px;
+            color: var(--primary);
+            border-right: 4px solid var(--primary);
+            padding-right: 15px;
+            margin-bottom: 30px;
+        }
+
+        .shop-layout {
             display: grid;
-            grid-template-columns: 3fr 1fr;
+            grid-template-columns: 2fr 1fr;
             gap: 30px;
         }
 
-        .section-title {
-            grid-column: span 2;
-            font-size: 30px;
-            color: var(--primary);
-            text-align: right;
-            margin-bottom: 20px;
-            border-right: 5px solid var(--primary);
-            padding-right: 15px;
+        @media (max-width: 900px) {
+            .shop-layout { grid-template-columns: 1fr; }
         }
 
-        /* شبکه محصولات */
-        .products-grid {
+        .ranks-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
         }
 
-        .product-card {
+        .rank-card {
             background-color: var(--card-bg);
-            padding: 25px;
+            border: 1px solid var(--border);
             border-radius: 12px;
+            padding: 20px;
             text-align: center;
-            border: 1px solid #333;
             transition: 0.3s;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
-        .product-card:hover { 
-            border-color: var(--primary); 
-            transform: translateY(-8px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
+        .rank-card:hover { border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.1); }
+        .rank-title { font-size: 18px; color: var(--primary); font-weight: bold; margin: 10px 0; }
+        .rank-price { color: #f59e0b; font-weight: bold; font-size: 16px; margin-bottom: 15px; }
 
-        .product-card h3 { color: var(--primary); margin: 10px 0; font-size: 22px; }
-        .price { font-size: 24px; font-weight: bold; color: var(--accent); margin: 15px 0; }
-        
-        .btn-add {
-            width: 100%;
-            padding: 12px;
+        .btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            border-radius: 6px;
-            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: bold;
-            font-size: 16px;
+            cursor: pointer;
             transition: 0.2s;
-        }
-
-        .btn-add:hover { background-color: var(--secondary); }
-
-        /* سبد خرید */
-        .cart-container {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            height: fit-content;
-            position: sticky;
-            top: 100px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #333;
+            width: 100%;
             font-size: 14px;
         }
+        .btn:hover { background-color: var(--secondary); }
 
-        .cart-item button {
-            background: none;
-            border: none;
-            color: #ff4757;
-            cursor: pointer;
-            font-weight: bold;
+        .cart-box {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            position: sticky;
+            top: 90px;
+            height: fit-content;
         }
 
-        .cart-total {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            color: var(--primary);
-            padding-top: 10px;
-            border-top: 2px solid #333;
-        }
+        .cart-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px; color: var(--primary); }
+        .cart-items { min-height: 100px; max-height: 250px; overflow-y: auto; margin-bottom: 15px; font-size: 14px; }
+        .cart-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px dashed var(--border); padding-bottom: 8px; }
+        .cart-total { font-weight: bold; font-size: 16px; display: flex; justify-content: space-between; margin-bottom: 20px; }
 
-        .btn-checkout {
-            width: 100%;
-            padding: 15px;
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        @media (max-width: 900px) {
-            .container { grid-template-columns: 1fr; }
-            .section-title { grid-column: span 1; }
-            .cart-container { position: static; }
-        }
+        footer { background-color: #070a12; padding: 20px; text-align: center; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+        footer a { color: var(--primary); text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo">NGLand</a>
-        <nav>
-            <ul>
-                <li><a href="index.html">خانه</a></li>
-                <li><a href="shop.html">فروشگاه</a></li>
-            </ul>
-        </nav>
+    <header id="main-header">
+        <a href="index.html" class="logo">⚡ NGLand</a>
+        <div class="nav-center">
+            <div class="badge">🌐 IP: <span style="color: var(--primary);">lan.9craft.ir:31747</span></div>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" class="nav-link">خانه</a>
+            <a href="ping.html" class="nav-link">تست پینگ</a>
+            <a href="account.html" class="nav-link primary" id="account-nav-link">حساب کاربری</a>
+        </div>
     </header>
 
     <div class="container">
-        <h2 class="section-title">فروشگاه رنک‌های NGLand</h2>
-
-        <!-- محصولات (رنک‌ها) -->
-        <div class="products-grid" id="products-list">
-            <!-- رنک‌ها با قیمت‌های شما -->
-            <div class="product-card">
-                <h3>اسپانسر</h3>
-                <div class            class="price">600,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک اسپانسر', 600000)">افزودن به سبد</button>
+        <h1 class="page-title">فروشگاه رنک‌های سرور NGLand</h1>
+        
+        <div class="shop-layout">
+            <div class="ranks-grid">
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">👑</div><div class="rank-title">اسپانسر</div><div class="rank-price">600,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('اسپانسر', 600000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">💎</div><div class="rank-title">نایتمر</div><div class="rank-price">170,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('نایتمر', 170000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">⚡</div><div class="rank-title">پویزن</div><div class="rank-price">150,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('پویزن', 150000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">⭐</div><div class="rank-title">پی گاد</div><div class="rank-price">110,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('پی گاد', 110000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">🔥</div><div class="rank-title">پیکسل</div><div class="rank-price">99,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('پیکسل', 99000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">🛡️</div><div class="rank-title">کیلیر</div><div class="rank-price">70,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('کیلیر', 70000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">🎯</div><div class="rank-title">لجند</div><div class="rank-price">60,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('لجند', 60000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">🎖️</div><div class="rank-title">الیت</div><div class="rank-price">50,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('الیت', 50000)">افزودن به سبد خرید</button>
+                </div>
+                <div class="rank-card">
+                    <div><div style="font-size: 32px;">🎗️</div><div class="rank-title">VIP</div><div class="rank-price">30,000 تومان</div></div>
+                    <button class="btn" onclick="addToCart('VIP', 30000)">افزودن به سبد خرید</button>
+                </div>
             </div>
 
-            <div class="product-card">
-                <h3>پویزن</h3>
-                <div class="price">150,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک پویزن', 150000)">افزودن به سبد</button>
+            <div class="cart-box">
+                <div class="cart-title">🛒 سبد خرید شما</div>
+                <div class="cart-items" id="cart-items">
+                    <p style="color: var(--text-muted); text-align: center;">سبد خرید خالی است.</p>
+                </div>
+                <div class="cart-total">
+                    <span>مجموع:</span>
+                    <span id="cart-total-price" style="color: var(--primary);">0 تومان</span>
+                </div>
+                <button class="btn" onclick="checkout()">تکمیل خرید و پرداخت</button>
             </div>
-
-            <div class="product-card">
-                <h3>نایتمر</h3>
-                <div class="price">170,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک نایتمر', 170000)">افزودن به سبد</button>
-            </div>
-
-            <div class="product-card">
-                <h3>پیکسل</h3>
-                <div class="price">99,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک پیکسل', 99000)">افزودن به سبد</button>
-            </div>
-
-            <div class="product-card">
-                <h3>پی گاد</h3>
-                <div class="price">110,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک پی گاد', 110000)">افزودن به سبد</button>
-            </div>
-
-            <div class="product-card">
-                <h3>کیلیر</h3>
-                <div class="price">70,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک کیلیر', 70000)">افزودن به سبد</button>
-            </div>
-
-            <div class="product-card">
-                <h3>لجند</h3>
-                <div class="price">60,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک لجند', 60000)">افزودن به سبد</button>
-            </div>
-
-            <div class="product-card">
-                <h3>الیت</h3>
-                <div class="price">50,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک الیت', 50000)">افزودن به سبد</button>
-            </div>
-
-            <div class="product-card">
-                <h3>VIP</h3>
-                <div class="price">30,000 <small>تومان</small></div>
-                <button class="btn-add" onclick="addToCart('رنک VIP', 30000)">افزودن به سبد</button>
-            </div>
-        </div>
-
-        <!-- سبد خرید -->
-        <div class="cart-container">
-            <h3 style="margin-top: 0; color: var(--primary);">🛒 سبد خرید شما</h3>
-            <div id="cart-items">
-                <p style="color: #777; font-size: 14px; text-align: center;">سبد خرید خالی است</p>
-            </div>
-            
-            <div class="cart-total">
-                <span>جمعاً:</span>
-                <span id="total-price">0</span>
-            </div>
-
-            <button class="btn-checkout" onclick="checkout()">پرداخت نهایی</button>
         </div>
     </div>
 
+    <footer>
+        <p>حقوق سایت برای NGLand محفوظ است</p>
+        <p>ارتباط با ما : <a href="https://rubika.ir/ng_land_server" target="_blank">rubika.ir/ng_land_server</a></p>
+    </footer>
+
     <script>
+        window.addEventListener('scroll', () => {
+            document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20);
+        });
+
         let cart = [];
-        let total = 0;
 
         function addToCart(name, price) {
             cart.push({ name, price });
@@ -260,30 +229,27 @@
         }
 
         function updateCartUI() {
-            const cartItemsElement = document.getElementById('cart-items');
-            const totalPriceElement = document.getElementById('total-price');
+            const container = document.getElementById('cart-items');
+            const totalElement = document.getElementById('cart-total-price');
             
             if (cart.length === 0) {
-                cartItemsElement.innerHTML = '<p style="color: #777; font-size: 14px; text-align: center;">سبد خرید خالی است</p>';
-                totalPriceElement.innerText = '0';
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center;">سبد خرید خالی است.</p>';
+                totalElement.innerText = '0 تومان';
                 return;
             }
 
-            cartItemsElement.innerHTML = '';
-            total = 0;
-
+            container.innerHTML = '';
+            let total = 0;
             cart.forEach((item, index) => {
                 total += item.price;
-                const div = document.createElement('div');
-                div.className = 'cart-item';
-                div.innerHTML = `
-                    <span>${item.name}</span>
-                    <span>${item.price.toLocaleString()} <button onclick="removeItem(${index})">✕</button></span>
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.name}</span>
+                        <span>${item.price.toLocaleString()} تومان <span style="color: var(--danger); cursor: pointer; margin-right: 8px;" onclick="removeItem(${index})">✕</span></span>
+                    </div>
                 `;
-                cartItemsElement.appendChild(div);
             });
-
-            totalPriceElement.innerText = total.toLocaleString() + ' تومان';
+            totalElement.innerText = total.toLocaleString() + ' تومان';
         }
 
         function removeItem(index) {
@@ -293,12 +259,28 @@
 
         function checkout() {
             if (cart.length === 0) {
-                alert("سبد خرید شما خالی است!");
+                alert('سبد خرید شما خالی است!');
                 return;
             }
-            let itemsList = cart.map(i => i.name).join(', ');
-            alert("درخواست خرید ثبت شد!\nمحصولات: " + itemsList + "\nمبلغ قابل پرداخت: " + total.toLocaleString() + " تومان\n\nلطفاً برای تکمیل پرداخت با ادمین در روبیکا در ارتباط باشید.");
+            const user = localStorage.getItem('ngland_user');
+            if (!user) {
+                alert('لطفاً ابتدا وارد حساب کاربری خود شوید.');
+                window.location.href = 'account.html';
+                return;
+            }
+            alert('درگاه پرداخت شبیه‌سازی شد! خرید شما با موفقیت ثبت گردید.');
+            cart = [];
+            updateCartUI();
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('ngland_user');
+            if (user) {
+                const link = document.getElementById('account-nav-link');
+                link.innerHTML = '👤 ' + user;
+                link.href = 'profile.html';
+            }
+        });
     </script>
 </body>
 </html>
