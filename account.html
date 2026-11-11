@@ -134,24 +134,41 @@
         <p>ارتباط با ما : <a href="https://rubika.ir/ng_land_server" target="_blank">rubika.ir/ng_land_server</a></p>
     </footer>
 
-    <script>
-        window.addEventListener('scroll', () => {
-            document.getElementById('main-header').classList.toggle('scrolled', window.scrollY > 20);
-        });
+  <script>
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('main-header');
+        if(header) header.classList.toggle('scrolled', window.scrollY > 20);
+    });
 
-        function handleAuth() {
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+    function handleAuth() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
 
-            if (!username || !password) {
-                alert('لطفاً نام کاربری و رمز عبور را وارد کنید.');
-                return;
+        if (!username || !password) {
+            alert('لطفاً نام کاربری و رمز عبور را وارد کنید.');
+            return;
+        }
+
+        let users = JSON.parse(localStorage.getItem('ngland_users_db')) || {};
+
+        if (users[username]) {
+            if (users[username] === password) {
+                alert('خوش آمدید! ورود موفقیت‌آمیز بود.');
+                // هماهنگ شده با پروفایل:
+                localStorage.setItem('current_session', username); 
+                window.location.href = 'profile.html';
+            } else {
+                alert('رمز عبور اشتباه است!');
             }
-
-            localStorage.setItem('ngland_user', username);
-            alert('با موفقیت وارد شدید!');
+        } else {
+            users[username] = password;
+            localStorage.setItem('ngland_users_db', JSON.stringify(users));
+            // هماهنگ شده با پروفایل:
+            localStorage.setItem('current_session', username); 
+            alert('اکانت جدید با موفقیت ساخته شد! اکنون وارد شدید.');
             window.location.href = 'profile.html';
         }
-    </script>
+    }
+</script>
 </body>
 </html>
